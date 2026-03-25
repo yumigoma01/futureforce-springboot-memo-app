@@ -1,6 +1,7 @@
 package com.lesson.memo.controller;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lesson.memo.model.Memo;
+import com.lesson.memo.model.Priority;
 import com.lesson.memo.repository.MemoRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,20 +33,25 @@ public class MemoController {
     @GetMapping
     public String list(Model model) {
         List<Memo> memos = memoRepository.findAll();
-        model.addAttribute("memos", memos);
+        List<Memo> sortedMemo = memos.stream()
+              .sorted(Comparator.comparing(Memo::getPriority))
+              .toList();
+        model.addAttribute("memos", sortedMemo);
         return "memo-list";
     }
 
     @GetMapping("/new")
     public String showForm(Model model) {
         model.addAttribute("memo", new Memo());
+        model.addAttribute("priorities", Priority.values());
         return "memo-form";
     }
 
     @PostMapping("/create")
     public String create(@ModelAttribute @Valid Memo memo,
-            BindingResult result) {
+            BindingResult result, Model model) {
         if (result.hasErrors()) {
+        	model.addAttribute("priorities", Priority.values());
             return "memo-form";
         }
 
@@ -69,6 +76,7 @@ public class MemoController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model, HttpServletResponse response) {
+    	model.addAttribute("priorities", Priority.values());
         if (model.containsAttribute("memo")) {
             return "memo-form";
         }
@@ -100,6 +108,7 @@ public class MemoController {
         Memo memoToUpdate = opt.get();
 
         if (result.hasErrors()) {
+        	redirectAttributes.addFlashAttribute("priorities", Priority.values());
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.memo", result);
             redirectAttributes.addFlashAttribute("memo", memo);
             return "redirect:/memo/edit/" + id; // editにリダイレクト
@@ -107,6 +116,7 @@ public class MemoController {
 
         memoToUpdate.setTitle(memo.getTitle());
         memoToUpdate.setContent(memo.getContent());
+        memoToUpdate.setPriority(memo.getPriority());
         memoToUpdate.setUpdatedAt(LocalDateTime.now());
         memoRepository.save(memoToUpdate);
 
