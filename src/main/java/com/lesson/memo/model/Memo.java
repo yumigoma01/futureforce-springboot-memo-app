@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -30,21 +31,9 @@ public class Memo {
     @Column(nullable = false, length = 1000)
     private String content;
     
+    @NotNull(message = "優先度を入力してください")
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    public enum Priority{
-    	HIGH("高"),
-    	MEDIUM("中"),
-    	LOW("低");
-    	private final String label;
-    	Priority(String label){
-    		this.label = label;
-    	}
-    	public String getLabel() {
-    		return label;
-    	}
-    }
-
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
