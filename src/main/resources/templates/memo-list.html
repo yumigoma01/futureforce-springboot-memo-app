@@ -17,7 +17,7 @@
                 <i class="ri-add-circle-line"></i> 新規メモ
             </a>
                 <form th:action="@{/memo/search}" method="get" class="search">
-				<input type="text" name="keyword"
+				<input type="text" name="keyword" th:value="${keyword}"
 				class="form-control" placeholder="検索キーワード">
 				<button type="submit" class="btn btn-outline-primary">
 					<i class="ri-search-line"></i>検索
