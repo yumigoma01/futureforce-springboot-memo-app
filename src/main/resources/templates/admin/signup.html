@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新規登録</title>
+</head>
+<body>
+    <h2>新規登録</h2>
+    <form th:action="@{/memo/admin/signup}" th:object="${admin}" method="post">
+        
+        <div>
+            <label>姓：</label>
+            <input type="text" th:field="*{lastName}" required>
+            <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: red;"></p>
+        </div>
+        
+        <div>
+            <label>名：</label>
+            <input type="text" th:field="*{firstName}" required>
+            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: red;"></p>
+        </div>
+        
+        <div>
+            <label>メールアドレス：</label>
+            <input type="email" th:field="*{email}" required>
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></p>
+        </div>
+
+        <div>
+            <label>パスワード：</label>
+            <input type="password" th:field="*{password}" required>
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></p>
+        </div>
+        
+        <button type="submit">登録する</button>
+    </form>
+    <br>
+    <a th:href="@{/memo/admin/signin}">ログイン画面に戻る</a>
+</body>
+</html>
