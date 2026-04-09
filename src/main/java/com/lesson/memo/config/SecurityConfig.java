@@ -17,17 +17,17 @@ public class SecurityConfig {
     	http
     		.authorizeHttpRequests(authorize -> authorize
     				.requestMatchers("/css/**","/js/**").permitAll()
-    				.requestMatchers("/memo/admin/signup","/memo/admin/signin","/memo/admin/login").permitAll()
+    				.requestMatchers("/memo/admin/signup","/memo/admin/signin").permitAll()
     				.anyRequest().authenticated()
     				)
     		.formLogin(login -> login
     				.loginPage("/memo/admin/signin")
-    				.loginProcessingUrl("/memo/admin/login")
+    				.loginProcessingUrl("/memo/admin/signin")
     				.defaultSuccessUrl("/memo",true)
     				.permitAll()
     				)
     		.logout(logout -> logout
-    				.logoutUrl("/memo/logout")
+    				.logoutUrl("/memo/admin/logout")
     				.logoutSuccessUrl("/memo/admin/signin?logout")
     				.invalidateHttpSession(true)
     				.deleteCookies("JSESSIONID")

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.lesson.memo.model.Admin;
 import com.lesson.memo.model.Memo;
 import com.lesson.memo.model.Priority;
-import com.lesson.memo.repository.AdminRepository;
 import com.lesson.memo.repository.MemoRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,12 +30,6 @@ public class MemoController {
 
     @Autowired
     private MemoRepository memoRepository;
-    
-    @Autowired
-    private AdminRepository adminRepository;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public String list(Model model) {
@@ -155,38 +146,13 @@ public String search(@RequestParam(name = "keyword", required = false) String ke
     } else {
         memos = memoRepository.findAll();
     }
-    
+    List<Memo> sortedMemos = memos.stream()
+            .sorted(Comparator.comparing(Memo::getPriority))
+            .toList();
+ 
     model.addAttribute("memos", memos);
     model.addAttribute("keyword", keyword);
     
     return "memo-list"; 
 	}
-
-@GetMapping("/admin/signup")
-public String showSignupPage(Model model) {
-    model.addAttribute("admin", new Admin());
-    return "admin/signup";
-}
-
-@PostMapping("/admin/signup")
-public String signup(@ModelAttribute @Valid  Admin admin,
-        BindingResult result, Model model) {
-    if (result.hasErrors()) {
-        return "admin/signup";
-    }
-    admin.setCreatedAt(LocalDateTime.now());
-    admin.setUpdatedAt(LocalDateTime.now());
-    String hashedPassword =passwordEncoder.encode(admin.getPassword());
-    admin.setPassword(hashedPassword);
-    
-    adminRepository.save(admin);
-
-    return "redirect:/memo/admin/signin";
-}  
-
-
-@GetMapping("/admin/signin")
-public String signin() {
-	return "admin/signin";
-}
 }
