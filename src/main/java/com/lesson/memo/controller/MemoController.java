@@ -149,14 +149,13 @@ public String search(@RequestParam(name = "keyword", required = false) String ke
 	}else {
         memos = memoRepository.findAll();
     }
-    
-    List<Memo> sortedMemo = memos.stream()
+    List<Memo> sortedMemos = memos.stream()
             .sorted(Comparator.comparing(Memo::getPriority))
-            .toList();    
-    
-    model.addAttribute("memos", sortedMemo);
+            .toList();
+ 
+    model.addAttribute("memos", memos);
     model.addAttribute("keyword", keyword);
     
     return "memo-list"; 
-}
+	}
 }
