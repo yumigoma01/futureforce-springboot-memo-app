@@ -141,9 +141,12 @@ public class MemoController {
 public String search(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
     List<Memo> memos;
     
-    if (keyword != null && !keyword.isEmpty()) {
+    if (keyword == null) {
+    	keyword = "";
+    }
+    if (!keyword.isEmpty()) {
         memos = memoRepository.findByTitleContainingOrContentContainingOrderByUpdatedAtDesc(keyword, keyword);
-    } else {
+	}else {
         memos = memoRepository.findAll();
     }
     List<Memo> sortedMemos = memos.stream()
