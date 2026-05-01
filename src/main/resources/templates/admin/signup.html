@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2>新規登録</h2>
-    <form th:action="@{/memo/admin/signup}" th:object="${admin}" method="post">
+    <form th:action="@{/admin/signup}" th:object="${admin}" method="post">
         
         <div>
             <label>姓：</label>
@@ -35,6 +35,6 @@
         <button type="submit">登録する</button>
     </form>
     <br>
-    <a th:href="@{/memo/admin/signin}">ログイン画面に戻る</a>
+    <a th:href="@{/admin/signin}">ログイン画面に戻る</a>
 </body>
 </html>

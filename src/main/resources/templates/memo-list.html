@@ -11,10 +11,9 @@
 
 <body>
     <div class="container">
-		<form th:action="@{/memo/admin/logout}" method="post" style="text-align: end; margin-bottom: 5px;">
+		<form th:action="@{/admin/logout}" method="post" style="text-align: end; margin-bottom: 5px;">
 		<button type="submit">ログアウト</button>
 		</form>
-		
         <div class="header">
             <h1 class="app-title">メモ一覧</h1>
             <a th:href="@{/memo/new}" class="btn btn-primary">
@@ -26,7 +25,7 @@
 				<button type="submit" class="btn btn-outline-primary">
 					<i class="ri-search-line"></i>検索
 				</button>
-				</form>
+			</form>
         </div>
 
 

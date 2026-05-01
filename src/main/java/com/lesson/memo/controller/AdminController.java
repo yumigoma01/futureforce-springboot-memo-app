@@ -18,8 +18,8 @@ import com.lesson.memo.repository.AdminRepository;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/memo")
-class AdminController {
+@RequestMapping("/admin")
+public class AdminController {
 	
     @Autowired
     private AdminRepository adminRepository;
@@ -27,17 +27,17 @@ class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-	@GetMapping("/admin/signup")
+	@GetMapping("/signup")
 	public String showSignupPage(Model model) {
 	    model.addAttribute("admin", new Admin());
-	    return "admin/signup";
+	    return "/admin/signup";
 	}
 	
-	@PostMapping("/admin/signup")
+	@PostMapping("/signup")
 	public String signup(@ModelAttribute @Valid  Admin admin,
 	        BindingResult result, Model model) {
 	    if (result.hasErrors()) {
-	        return "admin/signup";
+	        return "/admin/signup";
 	    }
 	    admin.setCreatedAt(LocalDateTime.now());
 	    admin.setUpdatedAt(LocalDateTime.now());
@@ -46,13 +46,13 @@ class AdminController {
 	    
 	    adminRepository.save(admin);
 	
-	    return "redirect:/memo/admin/signin";
+	    return "redirect:/admin/signin";
 	}  
 	
 	
-	@GetMapping("/admin/signin")
+	@GetMapping("/signin")
 	public String signin() {
-		return "admin/signin";
+		return "/admin/signin";
 	}
 	
 }
